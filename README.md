@@ -25,3 +25,12 @@ npm install --save-dev lint-staged
 npm i node-telegram-bot-api
 
 npm install dotenv
+
+heroku login
+heroku git:remote -a about-me-bot12
+git add .
+git push heroku dev
+
+buildbacks
+heroku/nodejs
+jontewks/puppeteer

@@ -28,7 +28,7 @@ bot.onText(/\start/, (msg) => {
 });
 // eslint-disable-next-line
 bot.onText(/\help/, (msg) => {
-  const reply = "help";
+  const reply = "help2";
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, reply);
 });
