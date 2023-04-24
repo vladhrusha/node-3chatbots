@@ -23,3 +23,5 @@ git add .husky/pre-commit
 npm install --save-dev lint-staged
 
 npm i node-telegram-bot-api
+
+npm install dotenv
