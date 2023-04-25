@@ -34,3 +34,6 @@ git push heroku dev
 buildbacks
 heroku/nodejs
 jontewks/puppeteer
+
+heroku config:set TOKEN=
+heroku config:set HEROKU_URL=$(heroku info -s | grep web_url | cut -d= -f2)
