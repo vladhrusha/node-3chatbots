@@ -2,11 +2,22 @@ require("dotenv").config();
 
 const TelegramBot = require("node-telegram-bot-api");
 const token = process.env.TOKEN_THREEDOTONEABOUTMEBOT;
-const bot = new TelegramBot(token, { polling: true });
+let bot;
+// const bot = new TelegramBot(token, { polling: true });
 // bot.on("message", (msg) => {
 //   const chatId = msg.chat.id;
 //   bot.sendMessage(chatId, "Hello World");
 // });
+
+if (process.env.NODE_ENV === "production") {
+  bot = new TelegramBot(token);
+  bot.setWebHook(process.env.HEROKU_URL + bot.token);
+} else {
+  bot = new TelegramBot(token, { polling: true });
+}
+
+// eslint-disable-next-line
+console.log("Bot server started in the " + process.env.NODE_ENV + " mode");
 
 // eslint-disable-next-line
 bot.onText(/\about/, (msg) => {
