@@ -12,6 +12,8 @@ let bot;
 if (process.env.NODE_ENV === "production") {
   bot = new TelegramBot(token);
   bot.setWebHook(process.env.HEROKU_URL + token);
+  // eslint-disable-next-line
+  console.log(process.env.NODE_ENV);
 } else {
   bot = new TelegramBot(token, { polling: true });
 }
