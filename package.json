@@ -11,8 +11,7 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\"",
     "format": "prettier --write && eslint --fix",
-    "lint": "prettier --check && eslint --check",
-    "prepare": "husky install"
+    "lint": "prettier --check && eslint --check"
   },
   "repository": {
     "type": "git",
