@@ -1,62 +1,27 @@
-// require("dotenv").config();
-
-// const TelegramBot = require("node-telegram-bot-api");
-// // const token = process.env.TOKEN_THREEDOTONEABOUTMEBOT;
-// const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
-
-// // let bot;
-
-// // if (process.env.NODE_ENV === "production") {
-// //   bot = new TelegramBot(token);
-// //   // bot.setWebHook(process.env.HEROKU_URL + token);
-// //   bot.setWebHook(
-// //     `https://api.telegram.org/bot${token}/setWebhook?url=https://about-me-bot12.herokuapp.com/`,
-// //   );
-// //   // eslint-disable-next-line
-// //   console.log(process.env.NODE_ENV);
-// // } else {
-// //   bot = new TelegramBot(token, { polling: true });
-// // }
-
-// const bot = new TelegramBot(token);
-// // bot.setWebHook(process.env.HEROKU_URL + token);
-// bot.setWebHook(
-//   `https://api.telegram.org/bot${token}/setWebhook?url=https://about-me-bot12.herokuapp.com/`,
-// );
-
 // // eslint-disable-next-line
-
-// bot.on("message", async (msg) => {
-//   // eslint-disable-next-line
-//   console.log(msg);
+// bot.onText(/\about/, (msg) => {
+//   const reply = "about";
 //   const chatId = msg.chat.id;
-//   bot.sendMessage(chatId, "hello2");
+//   bot.sendMessage(chatId, reply);
 // });
-// //
-// // // eslint-disable-next-line
-// // bot.onText(/\about/, (msg) => {
-// //   const reply = "about";
-// //   const chatId = msg.chat.id;
-// //   bot.sendMessage(chatId, reply);
-// // });
-// // // eslint-disable-next-line
-// // bot.onText(/\links/, (msg) => {
-// //   const reply = "links";
-// //   const chatId = msg.chat.id;
-// //   bot.sendMessage(chatId, reply);
-// // });
-// // // eslint-disable-next-line
-// // bot.onText(/\start/, (msg) => {
-// //   const reply = "start";
-// //   const chatId = msg.chat.id;
-// //   bot.sendMessage(chatId, reply);
-// // });
-// // // eslint-disable-next-line
-// // bot.onText(/\help/, (msg) => {
-// //   const reply = "help2";
-// //   const chatId = msg.chat.id;
-// //   bot.sendMessage(chatId, reply);
-// // });
+// // eslint-disable-next-line
+// bot.onText(/\links/, (msg) => {
+//   const reply = "links";
+//   const chatId = msg.chat.id;
+//   bot.sendMessage(chatId, reply);
+// });
+// // eslint-disable-next-line
+// bot.onText(/\start/, (msg) => {
+//   const reply = "start";
+//   const chatId = msg.chat.id;
+//   bot.sendMessage(chatId, reply);
+// });
+// // eslint-disable-next-line
+// bot.onText(/\help/, (msg) => {
+//   const reply = "help2";
+//   const chatId = msg.chat.id;
+//   bot.sendMessage(chatId, reply);
+// });
 
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
@@ -67,9 +32,13 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
 
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token);
-bot.setWebHook(`https://about-me-bot12.herokuapp.com/bot${token}`);
+let bot;
+if (process.env.NODE_ENV === "production") {
+  bot = new TelegramBot(token);
+  bot.setWebHook(`https://about-me-bot12.herokuapp.com/bot${token}`);
+} else {
+  bot = new TelegramBot(token, { polling: true });
+}
 
 app.use(express.json());
 
