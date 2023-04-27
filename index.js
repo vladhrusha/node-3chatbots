@@ -73,27 +73,10 @@ bot.setWebHook(`https://about-me-bot12.herokuapp.com/bot${token}`);
 
 app.use(express.json());
 
-// app.get("/", (req, res) => {
-//   res.status(200).json({ message: "Hello from the Bot API." });
-// });
-app.get("/favicon.ico", (req, res) => res.status(204));
 app.get("/", (req, res) => {
-  try {
-    // Perform some operation that may throw an error
-    const message = "Hello from the Bot API.";
-    if (message === undefined) {
-      throw new Error("Message is undefined.");
-    }
-    res.status(200).json({ message });
-  } catch (err) {
-    // eslint-disable-next-line
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-app.post("/", (req, res) => {
   res.status(200).json({ message: "Hello from the Bot API." });
 });
+
 app.post(`/${token}`, (req, res) => {
   bot.processUpdate(req.body);
   res.status(200).json({ message: "ok" });
