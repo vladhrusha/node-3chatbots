@@ -77,6 +77,7 @@ app.use(express.json());
 // app.get("/", (req, res) => {
 //   res.status(200).json({ message: "Hello from the Bot API." });
 // });
+app.get("/favicon.ico", (req, res) => res.status(204));
 app.get("/", (req, res) => {
   try {
     // Perform some operation that may throw an error
