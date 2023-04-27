@@ -59,6 +59,8 @@
 // // });
 
 const TelegramBot = require("node-telegram-bot-api");
+const express = require("express");
+const app = express();
 
 // replace the value below with the Telegram token you receive from @BotFather
 const port = process.env.PORT || 5000;
@@ -68,6 +70,11 @@ const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
 const bot = new TelegramBot(token);
 bot.startWebhook(`/${token}`, null, port);
 bot.telegram.setWebhook(`https://about-me-bot12.herokuapp.com/${token}`);
+
+app.post(`/${process.env.TELEGRAM_TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.status(200).json({ message: "ok" });
+});
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, (msg, match) => {
