@@ -3,19 +3,24 @@ require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
 // const token = process.env.TOKEN_THREEDOTONEABOUTMEBOT;
 const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
-let bot;
 
-if (process.env.NODE_ENV === "production") {
-  bot = new TelegramBot(token);
-  // bot.setWebHook(process.env.HEROKU_URL + token);
-  bot.setWebHook(
-    `https://api.telegram.org/bot${token}/setWebhook?url=https://about-me-bot12.herokuapp.com/`,
-  );
-  // eslint-disable-next-line
-  console.log(process.env.NODE_ENV);
-} else {
-  bot = new TelegramBot(token, { polling: true });
-}
+// if (process.env.NODE_ENV === "production") {
+//   bot = new TelegramBot(token);
+//   // bot.setWebHook(process.env.HEROKU_URL + token);
+//   bot.setWebHook(
+//     `https://api.telegram.org/bot${token}/setWebhook?url=https://about-me-bot12.herokuapp.com/`,
+//   );
+//   // eslint-disable-next-line
+//   console.log(process.env.NODE_ENV);
+// } else {
+//   bot = new TelegramBot(token, { polling: true });
+// }
+
+const bot = new TelegramBot(token);
+// bot.setWebHook(process.env.HEROKU_URL + token);
+bot.setWebHook(
+  `https://api.telegram.org/bot${token}/setWebhook?url=https://about-me-bot12.herokuapp.com/`,
+);
 
 // eslint-disable-next-line
 console.log("Bot server started in the " + process.env.NODE_ENV + " mode");
