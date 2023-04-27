@@ -26,7 +26,7 @@ bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, "hello2");
 });
-
+//
 // // eslint-disable-next-line
 // bot.onText(/\about/, (msg) => {
 //   const reply = "about";
