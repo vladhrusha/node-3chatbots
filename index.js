@@ -74,8 +74,22 @@ bot.telegram.setWebhook(`https://about-me-bot12.herokuapp.com/bot${token}`);
 
 app.use(express.json());
 
+// app.get("/", (req, res) => {
+//   res.status(200).json({ message: "Hello from the Bot API." });
+// });
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hello from the Bot API." });
+  try {
+    // Perform some operation that may throw an error
+    const message = "Hello from the Bot API.";
+    if (message === undefined) {
+      throw new Error("Message is undefined.");
+    }
+    res.status(200).json({ message });
+  } catch (err) {
+    // eslint-disable-next-line
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 app.post("/", (req, res) => {
   res.status(200).json({ message: "Hello from the Bot API." });
