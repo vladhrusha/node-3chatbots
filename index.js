@@ -7,7 +7,10 @@ let bot;
 
 if (process.env.NODE_ENV === "production") {
   bot = new TelegramBot(token);
-  bot.setWebHook(process.env.HEROKU_URL + token);
+  // bot.setWebHook(process.env.HEROKU_URL + token);
+  bot.setWebHook(
+    `https://api.telegram.org/bot${token}/setWebhook?url=https://about-me-bot12.herokuapp.com/`,
+  );
   // eslint-disable-next-line
   console.log(process.env.NODE_ENV);
 } else {
