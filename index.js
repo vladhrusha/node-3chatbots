@@ -52,7 +52,7 @@ app.post(`/${token}`, (req, res) => {
     res.status(200).json({ message: "ok" });
   } catch (error) {
     // eslint-disable-next-line
-    console.log(error);
+    res.status(322);
   }
 });
 app.listen(port, () => {
