@@ -69,7 +69,7 @@ const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token);
-bot.telegram.setWebhook(`https://about-me-bot12.herokuapp.com/bot${token}`);
+bot.setWebhook(`https://about-me-bot12.herokuapp.com/bot${token}`);
 
 app.use(express.json());
 
