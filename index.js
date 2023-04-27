@@ -71,7 +71,7 @@ const bot = new TelegramBot(token);
 bot.startWebhook(`/${token}`, null, port);
 bot.telegram.setWebhook(`https://about-me-bot12.herokuapp.com/${token}`);
 
-app.post(`/${process.env.TELEGRAM_TOKEN}`, (req, res) => {
+app.post(`/${token}`, (req, res) => {
   bot.processUpdate(req.body);
   res.status(200).json({ message: "ok" });
 });
