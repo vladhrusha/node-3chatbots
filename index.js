@@ -47,13 +47,8 @@ app.get("/", (req, res) => {
 });
 
 app.post(`/${token}`, (req, res) => {
-  try {
-    bot.processUpdate(req.body);
-    res.status(200).json({ message: "ok" });
-  } catch (error) {
-    // eslint-disable-next-line
-    res.status(401);
-  }
+  bot.processUpdate(req.body);
+  res.status(200).json({ message: "ok" });
 });
 app.listen(port, () => {
   // eslint-disable-next-line
