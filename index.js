@@ -61,6 +61,7 @@
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const app = express();
+require("dotenv").config();
 
 // replace the value below with the Telegram token you receive from @BotFather
 const port = process.env.PORT || 5000;
@@ -71,9 +72,18 @@ const bot = new TelegramBot(token);
 bot.startWebhook(`/${token}`, null, port);
 bot.telegram.setWebhook(`https://about-me-bot12.herokuapp.com/${token}`);
 
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Hello from the Bot API." });
+});
 app.post(`/${token}`, (req, res) => {
   bot.processUpdate(req.body);
   res.status(200).json({ message: "ok" });
+});
+app.listen(port, () => {
+  // eslint-disable-next-line
+  console.log(`\n\nServer running on port ${port}.\n\n`);
 });
 
 // Matches "/echo [whatever]"
@@ -91,7 +101,7 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 
 // Listen for any kind of message. There are different kinds of
 // messages.
-bot.on("message", (msg) => {
+bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
 
   // send a message to the chat acknowledging receipt of their message
