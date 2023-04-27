@@ -55,7 +55,12 @@ app.listen(port, () => {
   console.log(`\n\nServer running on port ${port}.\n\n`);
 });
 
-// Matches "/echo [whatever]"
+// eslint-disable-next-line
+bot.onText(/\help/, (msg) => {
+  const reply = "help2";
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, reply);
+});
 bot.onText(/\/echo (.+)/, (msg, match) => {
   // 'msg' is the received Message from Telegram
   // 'match' is the result of executing the regexp above on the text content
