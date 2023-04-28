@@ -49,7 +49,7 @@ bot.onText(/\links/, (msg) => {
 });
 // eslint-disable-next-line
 bot.onText(/\help/, (msg) => {
-  const reply = "help2";
+  const reply = "Here is the list";
   const chatId = msg.chat.id;
 
   const opts = {
