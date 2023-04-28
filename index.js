@@ -31,13 +31,13 @@ app.listen(port, () => {
 });
 
 // eslint-disable-next-line
-bot.onText(/\about/, (msg) => {
+bot.onText(/\about/, async (msg) => {
   const reply = "My name is Vlad";
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, reply);
 });
 // eslint-disable-next-line
-bot.onText(/\links/, (msg) => {
+bot.onText(/\links/, async (msg) => {
   const chatId = msg.chat.id;
   const mySocials = {};
   mySocials.linkedIn = "https://www.linkedin.com/in/vladyslavhrusha/";
@@ -48,7 +48,7 @@ bot.onText(/\links/, (msg) => {
   bot.sendMessage(chatId, reply);
 });
 // eslint-disable-next-line
-bot.onText(/\help/, (msg) => {
+bot.onText(/\help/, async (msg) => {
   const reply = "Here is the list";
   const chatId = msg.chat.id;
 
