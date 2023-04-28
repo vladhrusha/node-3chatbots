@@ -51,7 +51,14 @@ bot.onText(/\links/, (msg) => {
 bot.onText(/\start/, (msg) => {
   const reply = "start";
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, reply);
+
+  const opts = {
+    reply_to_message_id: msg.message_id,
+    reply_markup: JSON.stringify({
+      keyboard: [["test1"], ["test2"]],
+    }),
+  };
+  bot.sendMessage(chatId, reply, opts);
 });
 // eslint-disable-next-line
 bot.onText(/\help/, (msg) => {
