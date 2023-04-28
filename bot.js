@@ -1,10 +1,11 @@
 const TelegramBot = require("node-telegram-bot-api");
 let bot;
-const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
+const token = process.env.TELEGRAM_TOKEN;
+const url = process.env.HEROKU_URL;
 
 if (process.env.NODE_ENV === "production") {
   bot = new TelegramBot(token);
-  bot.setWebHook(`https://about-me-bot12.herokuapp.com/${token}`);
+  bot.setWebHook(`${url}${token}`);
 } else {
   bot = new TelegramBot(token, { polling: true });
 }
