@@ -32,14 +32,19 @@ app.listen(port, () => {
 
 // eslint-disable-next-line
 bot.onText(/\about/, (msg) => {
-  const reply = "about";
+  const reply = "My name is Vlad";
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, reply);
 });
 // eslint-disable-next-line
 bot.onText(/\links/, (msg) => {
-  const reply = "links";
   const chatId = msg.chat.id;
+  const mySocials = {};
+  mySocials.linkedIn = "https://www.linkedin.com/in/vladyslavhrusha/";
+  mySocials.facebook = "https://www.facebook.com/vladyslav.hrusha";
+  const reply = `Welcome, here are my social links \n
+  - LinkenIn - ${mySocials.linkedIn}\n
+  - Facebook - ${mySocials.facebook}`;
   bot.sendMessage(chatId, reply);
 });
 // eslint-disable-next-line
