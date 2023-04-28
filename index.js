@@ -48,19 +48,6 @@ bot.onText(/\links/, (msg) => {
   bot.sendMessage(chatId, reply);
 });
 // eslint-disable-next-line
-bot.onText(/\start/, (msg) => {
-  const reply = "start";
-  const chatId = msg.chat.id;
-
-  const opts = {
-    reply_to_message_id: msg.message_id,
-    reply_markup: JSON.stringify({
-      keyboard: [["test1"], ["test2"]],
-    }),
-  };
-  bot.sendMessage(chatId, reply, opts);
-});
-// eslint-disable-next-line
 bot.onText(/\help/, (msg) => {
   const reply = "help2";
   const chatId = msg.chat.id;
@@ -68,7 +55,12 @@ bot.onText(/\help/, (msg) => {
   const opts = {
     reply_to_message_id: msg.message_id,
     reply_markup: JSON.stringify({
-      keyboard: [["test1"], ["test2"]],
+      keyboard: [
+        ["/start - start bot"],
+        ["/help - list all commands"],
+        ["/links - provide my social links"],
+        ["/about - provide short info about me"],
+      ],
     }),
   };
   bot.sendMessage(chatId, reply, opts);
