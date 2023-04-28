@@ -35,7 +35,7 @@ const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
 let bot;
 if (process.env.NODE_ENV === "production") {
   bot = new TelegramBot(token);
-  bot.setWebHook(`https://about-me-bot12.herokuapp.com/bottest${token}`);
+  bot.setWebHook(`https://about-me-bot12.herokuapp.com/${token}`);
 } else {
   bot = new TelegramBot(token, { polling: true });
 }
