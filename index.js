@@ -64,7 +64,14 @@ bot.onText(/\start/, (msg) => {
 bot.onText(/\help/, (msg) => {
   const reply = "help2";
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, reply);
+
+  const opts = {
+    reply_to_message_id: msg.message_id,
+    reply_markup: JSON.stringify({
+      keyboard: [["test1"], ["test2"]],
+    }),
+  };
+  bot.sendMessage(chatId, reply, opts);
 });
 
 // // Listen for any kind of message. There are different kinds of
