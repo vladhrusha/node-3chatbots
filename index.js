@@ -1,28 +1,3 @@
-// // eslint-disable-next-line
-// bot.onText(/\about/, (msg) => {
-//   const reply = "about";
-//   const chatId = msg.chat.id;
-//   bot.sendMessage(chatId, reply);
-// });
-// // eslint-disable-next-line
-// bot.onText(/\links/, (msg) => {
-//   const reply = "links";
-//   const chatId = msg.chat.id;
-//   bot.sendMessage(chatId, reply);
-// });
-// // eslint-disable-next-line
-// bot.onText(/\start/, (msg) => {
-//   const reply = "start";
-//   const chatId = msg.chat.id;
-//   bot.sendMessage(chatId, reply);
-// });
-// // eslint-disable-next-line
-// bot.onText(/\help/, (msg) => {
-//   const reply = "help2";
-//   const chatId = msg.chat.id;
-//   bot.sendMessage(chatId, reply);
-// });
-
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const app = express();
@@ -55,32 +30,36 @@ app.listen(port, () => {
   console.log(`\n\nServer running on port ${port}.\n\n`);
 });
 
-// // eslint-d  // eslint-disable-next-line
+// eslint-disable-next-line
+bot.onText(/\about/, (msg) => {
+  const reply = "about";
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, reply);
+});
+// eslint-disable-next-line
+bot.onText(/\links/, (msg) => {
+  const reply = "links";
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, reply);
+});
+// eslint-disable-next-line
+bot.onText(/\start/, (msg) => {
+  const reply = "start";
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, reply);
+});
 // eslint-disable-next-line
 bot.onText(/\help/, (msg) => {
   const reply = "help2";
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, reply);
 });
-bot.onText(/\/echo (.+)/, (msg, match) => {
-  // 'msg' is the received Message from Telegram
-  // 'match' is the result of executing the regexp above on the text content
-  // of the message
 
-  const chatId = msg.chat.id;
-  const resp = match[1]; // the captured "whatever"
+// // Listen for any kind of message. There are different kinds of
+// // messages.
+// bot.on("message", async (msg) => {
+//   const chatId = msg.chat.id;
 
-  // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, resp);
-});
-
-// Listen for any kind of message. There are different kinds of
-// messages.
-bot.on("message", async (msg) => {
-  const chatId = msg.chat.id;
-
-  // send a message to the chat acknowledging receipt of their message
-  bot.sendMessage(chatId, "Received your message");
-});
-// eslint-disable-next-line
-console.log(`Server running on port ${port}`);
+//   // send a message to the chat acknowledging receipt of their message
+//   bot.sendMessage(chatId, "Received your message");
+// });
