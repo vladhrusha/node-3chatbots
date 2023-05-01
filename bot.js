@@ -21,18 +21,18 @@ const establishConnection = () => {
 establishConnection();
 
 // eslint-disable-next-line
-bot.onText(/\about/, (msg) => {
+bot.onText(/\about/, async (msg) => {
   try {
     const reply = "My name is Vlad";
     const chatId = msg.chat.id;
-    bot.sendMessage(chatId, reply);
+    await bot.sendMessage(chatId, reply);
   } catch (err) {
     // eslint-disable-next-line
     console.error(err);
   }
 });
 // eslint-disable-next-line
-bot.onText(/\links/, (msg) => {
+bot.onText(/\links/, async (msg) => {
   try {
     const chatId = msg.chat.id;
     const mySocials = {};
@@ -41,14 +41,14 @@ bot.onText(/\links/, (msg) => {
     const reply = `Welcome, here are my social links \n
   - LinkenIn - ${mySocials.linkedIn}\n
   - Facebook - ${mySocials.facebook}`;
-    bot.sendMessage(chatId, reply);
+    await bot.sendMessage(chatId, reply);
   } catch (err) {
     // eslint-disable-next-line
     console.error(err);
   }
 });
 // eslint-disable-next-line
-bot.onText(/\help/, (msg) => {
+bot.onText(/\help/, async (msg) => {
   try {
     const reply = "Here is the list";
     const chatId = msg.chat.id;
@@ -64,7 +64,7 @@ bot.onText(/\help/, (msg) => {
         ],
       }),
     };
-    bot.sendMessage(chatId, reply, opts);
+    await bot.sendMessage(chatId, reply, opts);
   } catch (err) {
     // eslint-disable-next-line
     console.error(err);
