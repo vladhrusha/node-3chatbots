@@ -1,12 +1,9 @@
-const loggerConfig = require("./config/loggerConfig");
-
 require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
 let bot;
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.HEROKU_URL;
-const pino = require("pino");
-const logger = pino(loggerConfig);
+const logger = require("./utils/logger");
 
 const establishConnection = () => {
   try {
