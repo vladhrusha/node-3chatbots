@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const logger = require("./utils/logger");
 
 const port = process.env.PORT || 5000;
-const token = "6226322961:AAFUZl0yNlCXaeOjiwrIBgSOolk_OztvzSU";
+const token = process.env.TELEGRAM_TOKEN;
 
 const bot = require("./bot");
 
@@ -18,6 +19,5 @@ app.post(`/${token}`, (req, res) => {
   res.status(200).json({ message: "ok" });
 });
 app.listen(port, () => {
-  // eslint-disable-next-line
-  console.log(`\n\nServer running on port ${port}.\n\n`);
+  logger.info(`\n\nServer running on port ${port}.\n\n`);
 });

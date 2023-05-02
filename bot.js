@@ -3,6 +3,7 @@ const TelegramBot = require("node-telegram-bot-api");
 let bot;
 const token = process.env.TELEGRAM_TOKEN;
 const url = process.env.HEROKU_URL;
+const logger = require("./utils/logger");
 
 const establishConnection = () => {
   try {
@@ -12,9 +13,9 @@ const establishConnection = () => {
     } else {
       bot = new TelegramBot(token, { polling: true });
     }
+    // throw new Error();
   } catch (err) {
-    // eslint-disable-next-line
-    console.error(err);
+    logger.error(err);
   }
 };
 
@@ -27,8 +28,7 @@ bot.onText(/\about/, async (msg) => {
     const chatId = msg.chat.id;
     await bot.sendMessage(chatId, reply);
   } catch (err) {
-    // eslint-disable-next-line
-    console.error(err);
+    logger.error(err);
   }
 });
 // eslint-disable-next-line
@@ -43,8 +43,7 @@ bot.onText(/\links/, async (msg) => {
   - Facebook - ${mySocials.facebook}`;
     await bot.sendMessage(chatId, reply);
   } catch (err) {
-    // eslint-disable-next-line
-    console.error(err);
+    logger.error(err);
   }
 });
 // eslint-disable-next-line
@@ -66,8 +65,7 @@ bot.onText(/\help/, async (msg) => {
     };
     await bot.sendMessage(chatId, reply, opts);
   } catch (err) {
-    // eslint-disable-next-line
-    console.error(err);
+    logger.error(err);
   }
 });
 
