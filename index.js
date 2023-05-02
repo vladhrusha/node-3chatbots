@@ -4,7 +4,7 @@ require("dotenv").config();
 const logger = require("./utils/logger");
 
 const port = process.env.PORT || 5000;
-const token = process.env.TELEGRAM_TOKEN;
+const token = process.env.HOLIDAYBOT_TOKEN;
 
 // const bot = require("./bot");
 const bot = require("./holidayBot");
