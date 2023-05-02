@@ -6,7 +6,8 @@ const logger = require("./utils/logger");
 const port = process.env.PORT || 5000;
 const token = process.env.TELEGRAM_TOKEN;
 
-const bot = require("./bot");
+// const bot = require("./bot");
+const bot = require("./holidayBot");
 
 app.use(express.json());
 

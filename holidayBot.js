@@ -1,7 +1,7 @@
 require("dotenv").config();
 const TelegramBot = require("node-telegram-bot-api");
 let bot;
-const token = process.env.TELEGRAM_TOKEN;
+const token = process.env.HOLIDAYBOT_TOKEN;
 const url = process.env.HEROKU_URL;
 const logger = require("./utils/logger");
 
