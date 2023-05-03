@@ -32,3 +32,22 @@ Bot -> TelegramBotServer: HTTP POST response
 TelegramBotServer -> TelegramBotChannel: Response from Telegram server
 TelegramBotChannel -> User: response to "/command"
 @enduml
+
+![alt text](./holidayBot_sequenceDiagram.png)
+
+@startuml
+title Telegram Bot + Heroku + HolidayAPI Sequence Diagram
+
+Heroku -> TelegramBotServer: set webhook
+User -> TelegramBotChannel: message
+TelegramBotChannel -> TelegramBotServer: HTTP POST request with user message
+TelegramBotServer -> Heroku: HTTP POST request with user message
+Heroku -> Express: HTTP POST request with user message
+Heroku -> TelegramBotServer: acknowledge request
+Express -> Bot: processUpdate(request.body)
+Bot -> HolidayApi: request holiday data
+HolidayApi -> Bot: response with data
+Bot -> TelegramBotServer: HTTP POST response
+TelegramBotServer -> TelegramBotChannel: Response from Telegram server
+TelegramBotChannel -> User: response to user message
+@enduml
