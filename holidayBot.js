@@ -4,12 +4,14 @@ let bot;
 const token = process.env.HOLIDAYBOT_TOKEN;
 const url = process.env.HEROKU_URL;
 const logger = require("./utils/logger");
-const { name, code } = require("country-emoji");
+const { flag, name, code } = require("country-emoji");
 
-const fetchData = require("./holidayAPI");
+const fetchHolidays = require("./utils/fetchHolidays");
 
 const countries = ["JP", "AL", "BE", "HR", "DK", "PE", "QA", "NO"];
-const countriesFlags = [];
+const countriesFlags = countries.map((country) => {
+  return flag(country);
+});
 
 const establishConnection = () => {
   try {
@@ -33,7 +35,7 @@ bot.on("message", async (msg) => {
     const input = code(msg.text);
 
     if (countries.includes(input)) {
-      const data = await fetchData(input);
+      const data = await fetchHolidays(input);
       if (data.length > 0) {
         const reply = data[0].name;
         await bot.sendMessage(chatId, name(input) + " - " + reply);
@@ -43,12 +45,13 @@ bot.on("message", async (msg) => {
   } catch (err) {
     logger.error(err);
   }
-}); // eslint-disable-next-line
+});
+
+// eslint-disable-next-line
 bot.onText(/\help/, async (msg) => {
   try {
     const reply = "Here is the list";
     const chatId = msg.chat.id;
-
     const opts = {
       reply_to_message_id: msg.message_id,
       reply_markup: JSON.stringify({
