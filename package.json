@@ -41,6 +41,8 @@
     }
   },
   "dependencies": {
+    "country-emoji": "^1.5.6",
+    "country-flag-emoji": "^1.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "node-telegram-bot-api": "^0.61.0",
