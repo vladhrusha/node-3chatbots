@@ -49,7 +49,6 @@ bot.on("message", async (msg) => {
 
 // eslint-disable-next-line
 bot.onText(/\/start/, async (msg) => {
-  logger.info("fired");
   try {
     const reply = "Here is the list";
     const chatId = msg.chat.id;
