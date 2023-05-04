@@ -20,6 +20,7 @@ const options = {
     port,
     key: `certs/yourdomain.key`, // Path to file with PEM private key
     cert: `certs/yourdomain.crt`, // Path to file with PEM certificate
+    selfSigned: true,
   },
 };
 // eslint-disable-next-line
