@@ -25,7 +25,9 @@ const establishConnection = () => {
   try {
     if (process.env.NODE_ENV === "production") {
       bot = new TelegramBot(token, options);
-      bot.setWebHook(`${url}${token}`, {
+      // eslint-disable-next-line
+      console.log(`${url}/bot${token}`);
+      bot.setWebHook(`${url}/bot${token}`, {
         certificate: options.webHook.cert,
       });
     } else {
@@ -73,5 +75,3 @@ bot.onText(/\/start/, async (msg) => {
     logger.error(err);
   }
 });
-
-module.exports = bot;
