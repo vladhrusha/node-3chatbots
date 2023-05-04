@@ -14,7 +14,7 @@ const countriesFlags = countries.map((country) => {
 });
 const port = process.env.PORT || 8443;
 // eslint-disable-next-line
-console.log(port);
+console.log("heroku port is - " + port);
 const options = {
   webHook: {
     port,
