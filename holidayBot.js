@@ -13,11 +13,21 @@ const countriesFlags = countries.map((country) => {
   return flag(country);
 });
 
+const options = {
+  webHook: {
+    port: 443,
+    key: `ssl/yourdomain.key`, // Path to file with PEM private key
+    cert: `ssl/yourdomain.crt`, // Path to file with PEM certificate
+  },
+};
+
 const establishConnection = () => {
   try {
     if (process.env.NODE_ENV === "production") {
-      bot = new TelegramBot(token);
-      bot.setWebHook(`${url}${token}`);
+      bot = new TelegramBot(token, options);
+      bot.setWebHook(`${url}${token}`, {
+        certificate: options.webHook.cert,
+      });
     } else {
       bot = new TelegramBot(token, { polling: true });
     }

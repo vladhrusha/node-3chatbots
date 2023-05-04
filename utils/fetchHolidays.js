@@ -1,5 +1,4 @@
 require("dotenv").config();
-const logger = require("./logger");
 
 const apiKey = process.env.ABSTRACTAPI_TOKEN;
 
@@ -15,14 +14,8 @@ const fetchHolidays = async (country) => {
     `https://holidays.abstractapi.com/v1/?api_key=${apiKey}` +
     `&country=${country}&year=${date.year}&month=${date.month}` +
     `&day=${date.day}`;
-  try {
-    const response = await fetch(fetchURL);
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    logger.error(error);
-    return null;
-  }
+  const response = await fetch(fetchURL);
+  return await response.json();
 };
 
 module.exports = fetchHolidays;

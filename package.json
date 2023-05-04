@@ -8,7 +8,7 @@
     "npm": "8.19.3"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node holidayBot.js",
     "test": "echo \"Error: no test specified\"",
     "format": "prettier --write && eslint --fix",
     "lint": "prettier --check && eslint --check"
