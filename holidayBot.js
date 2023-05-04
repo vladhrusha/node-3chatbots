@@ -13,22 +13,16 @@ const countriesFlags = countries.map((country) => {
   return flag(country);
 });
 const port = process.env.PORT || 8443;
-// eslint-disable-next-line
-console.log("heroku port is - " + port);
 const options = {
   webHook: {
     port,
   },
 };
-// eslint-disable-next-line
-console.log("options port is - " + options.webHook.port);
 
 const establishConnection = () => {
   try {
     if (process.env.NODE_ENV === "production") {
       bot = new TelegramBot(token, options);
-      // eslint-disable-next-line
-      console.log(`${url}bot${token}`);
       bot.setWebHook(`${url}bot${token}`, {
         certificate: options.webHook.cert,
       });
@@ -54,7 +48,7 @@ bot.on("message", async (msg) => {
         const reply = data[0].name;
         await bot.sendMessage(chatId, name(input) + " - " + reply);
       } else
-        await bot.sendMessage(chatId, name(input) + " - " + "not a holidayy");
+        await bot.sendMessage(chatId, name(input) + " - " + "not a holiday");
     }
   } catch (err) {
     logger.error(err);
