@@ -42,9 +42,8 @@ Heroku -> TelegramBotServer: set webhook
 User -> TelegramBotChannel: message
 TelegramBotChannel -> TelegramBotServer: HTTP POST request with user message
 TelegramBotServer -> Heroku: HTTP POST request with user message
-Heroku -> Express: HTTP POST request with user message
+Heroku -> Bot: HTTP POST request with user message
 Heroku -> TelegramBotServer: acknowledge request
-Express -> Bot: processUpdate(request.body)
 Bot -> HolidayApi: request holiday data
 HolidayApi -> Bot: response with data
 Bot -> TelegramBotServer: HTTP POST response
