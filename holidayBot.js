@@ -13,6 +13,8 @@ const countriesFlags = countries.map((country) => {
   return flag(country);
 });
 const port = process.env.PORT || 8443;
+// eslint-disable-next-line
+console.log(port);
 const options = {
   webHook: {
     port,
