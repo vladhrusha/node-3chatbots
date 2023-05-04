@@ -12,10 +12,10 @@ const countries = ["JP", "AL", "BE", "HR", "DK", "PE", "QA", "NO"];
 const countriesFlags = countries.map((country) => {
   return flag(country);
 });
-
+const port = process.env.PORT || 8443;
 const options = {
   webHook: {
-    port: 443,
+    port,
     key: `certs/yourdomain.key`, // Path to file with PEM private key
     cert: `certs/yourdomain.crt`, // Path to file with PEM certificate
   },
