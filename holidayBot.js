@@ -26,8 +26,8 @@ const establishConnection = () => {
     if (process.env.NODE_ENV === "production") {
       bot = new TelegramBot(token, options);
       // eslint-disable-next-line
-      console.log(`${url}/bot${token}`);
-      bot.setWebHook(`${url}/bot${token}`, {
+      console.log(`${url}bot${token}`);
+      bot.setWebHook(`${url}bot${token}`, {
         certificate: options.webHook.cert,
       });
     } else {
