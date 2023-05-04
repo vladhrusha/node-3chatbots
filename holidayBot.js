@@ -16,8 +16,8 @@ const countriesFlags = countries.map((country) => {
 const options = {
   webHook: {
     port: 443,
-    key: `ssl/yourdomain.key`, // Path to file with PEM private key
-    cert: `ssl/yourdomain.crt`, // Path to file with PEM certificate
+    key: `certs/yourdomain.key`, // Path to file with PEM private key
+    cert: `certs/yourdomain.crt`, // Path to file with PEM certificate
   },
 };
 
