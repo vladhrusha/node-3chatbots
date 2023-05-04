@@ -22,6 +22,8 @@ const options = {
     cert: `certs/yourdomain.crt`, // Path to file with PEM certificate
   },
 };
+// eslint-disable-next-line
+console.log("options port is - " + options.webHook.port);
 
 const establishConnection = () => {
   try {
