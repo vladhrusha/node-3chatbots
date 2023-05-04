@@ -52,7 +52,7 @@ bot.on("message", async (msg) => {
         const reply = data[0].name;
         await bot.sendMessage(chatId, name(input) + " - " + reply);
       } else
-        await bot.sendMessage(chatId, name(input) + " - " + "not a holiday");
+        await bot.sendMessage(chatId, name(input) + " - " + "not a holidayy");
     }
   } catch (err) {
     logger.error(err);
