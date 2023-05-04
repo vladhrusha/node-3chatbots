@@ -1,1 +1,1 @@
-web: node holidayBot.js
+worker: node holidayBot.js
