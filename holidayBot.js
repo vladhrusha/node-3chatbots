@@ -18,8 +18,6 @@ console.log("heroku port is - " + port);
 const options = {
   webHook: {
     port,
-    key: `certs/yourdomain.key`, // Path to file with PEM private key
-    cert: `certs/yourdomain.crt`, // Path to file with PEM certificate
   },
 };
 // eslint-disable-next-line
