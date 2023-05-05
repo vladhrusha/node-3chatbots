@@ -1,1 +1,1 @@
-web: node holidayBot.js
+web: node forecastBot.js
