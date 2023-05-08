@@ -26,6 +26,7 @@ const establishConnection = () => {
     // throw new Error();
   } catch (err) {
     logger.error(err);
+    process.exit(1);
   }
 };
 
@@ -52,7 +53,7 @@ bot.onText(/\help/, async (msg) => {
 });
 
 // eslint-disable-next-line
-bot.onText(/\/weather/, async (msg) => {
+bot.onText(/\/start/, async (msg) => {
   try {
     bot.sendMessage(msg.chat.id, "Please share your location", {
       reply_markup: {
@@ -73,19 +74,25 @@ bot.onText(/\/weather/, async (msg) => {
 });
 
 bot.on("location", async (msg) => {
+  let data;
+  let chatId;
   try {
-    const chatId = msg.chat.id;
+    chatId = msg.chat.id;
     const coordinates = {
       lat: msg.location.latitude,
       lon: msg.location.longitude,
     };
-    const data = await fetchForecast(coordinates);
+    data = await fetchForecast(coordinates);
     if (data === undefined) {
       await bot.sendMessage(chatId, "Weather server request error", {
         parse_mode: "HTML",
       });
       return;
     }
+  } catch (err) {
+    logger.error(err);
+  }
+  try {
     const weatherDataArray = await composeForecast(data);
     await bot.sendMessage(chatId, "Here is a forecast for next 5 days", {
       parse_mode: "HTML",
