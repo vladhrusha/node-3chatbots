@@ -91,6 +91,7 @@ bot.on("location", async (msg) => {
     }
   } catch (err) {
     logger.error(err);
+    process.exit(1);
   }
   try {
     const weatherDataArray = await composeForecast(data);
