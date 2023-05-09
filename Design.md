@@ -50,3 +50,29 @@ Bot -> TelegramBotServer: HTTP POST response
 TelegramBotServer -> TelegramBotChannel: Response from Telegram server
 TelegramBotChannel -> User: response to user message
 @enduml
+
+![alt text](./forecastBot_sequenceDiagram.png)
+
+@startuml
+title Telegram Bot + Heroku + OpenWeatherAPI Sequence Diagram
+
+Heroku -> TelegramBotServer: set webhook
+User -> TelegramBotChannel: require weather report
+TelegramBotChannel -> TelegramBotServer: HTTP POST request with user message
+TelegramBotServer -> Heroku: HTTP POST request with user message
+Heroku -> Bot: HTTP POST request with user message
+Heroku -> TelegramBotServer: acknowledge request
+Bot-> TelegramBotServer : request geolocation
+TelegramBotServer -> TelegramBotChannel: send geolocation input
+TelegramBotChannel -> User: display geolocation input
+User -> TelegramBotChannel: allow geolocation collection
+TelegramBotChannel -> TelegramBotServer: send geolocation data
+TelegramBotServer -> Heroku: send geolocation data
+Heroku -> Bot: HTTP POST with geolocation data
+Heroku -> TelegramBotServer: acknowledge getting geolocation data
+Bot -> HolidayApi: request weather data
+HolidayApi -> Bot: response with weather data
+Bot -> TelegramBotServer: HTTP POST responses with weather
+TelegramBotServer -> TelegramBotChannel: Response from Telegram server
+TelegramBotChannel -> User: response with weather report
+@enduml
