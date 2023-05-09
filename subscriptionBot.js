@@ -40,7 +40,6 @@ const getCollection = async () => {
 
 const CronJob = require("cron").CronJob;
 let userData;
-const subscription = {};
 const onSendWeatherReport = async (msg, userData) => {
   let data;
   let chatId;
@@ -124,9 +123,6 @@ bot.onText(/\/start/, async (msg) => {
   }
 
   userData = await onGetUserLocation(bot);
-  subscription.coordinates = userData.coordinates;
-  subscription.userName = msg.from.username;
-  subscription.userId = msg.from.id;
   await bot.sendMessage(chatId, "Received Coordinates", {
     reply_markup: {
       remove_keyboard: true,
@@ -151,8 +147,12 @@ bot.on("message", async (msg) => {
   }
   try {
     if (hour && minute) {
+      const subscription = {};
+      subscription.userId = msg.from.id;
+      subscription.userName = msg.from.username;
       subscription.hour = hour;
       subscription.minute = minute;
+      if (userData) subscription.coordinates = userData.coordinates;
       const cronFunction = (chatId) => {
         onSendWeatherReport(msg, userData);
       };
@@ -163,12 +163,18 @@ bot.on("message", async (msg) => {
         true,
         TZ,
       );
-      await subsCollection.insertOne(subscription);
-      await job.start();
-      bot.sendMessage(
-        chatId,
-        `You have subscribed on weather daily report at ${hour}:${minute}`,
-      );
+      logger.info(subscription);
+      if (Object.keys(subscription).length !== 0) {
+        await subsCollection.insertOne(subscription);
+        await job.start();
+        bot.sendMessage(
+          chatId,
+          `You have subscribed on weather daily report at ${subscription.hour}:${subscription.minute}`,
+        );
+        Object.keys(subscription).forEach((key) => delete subscription[key]);
+        hour = undefined;
+        minute = undefined;
+      }
     }
   } catch (err) {
     logger.error(err);
