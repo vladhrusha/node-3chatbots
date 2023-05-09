@@ -18,18 +18,24 @@ const composeForecast = require("./utils/composeForecast");
 const onGetUserLocation = require("./utils/onGetUserLocation");
 
 let subsCollection;
-const attemptDB = async () => {
+
+const getCollection = async () => {
   const dbo = require("./db/conn");
-  await dbo.connectToServer((err) => {
-    if (err) {
-      logger.error("Error connecting to MongoDB:", err);
-      process.exit(1);
-    } else {
-      logger.info("Successfully connected to MongoDB.");
-    }
-  });
-  const db = dbo.getDb();
-  subsCollection = await db.collection("subs");
+  try {
+    await dbo.connectToServer();
+    logger.info("Successfully connected to MongoDB.");
+  } catch (err) {
+    logger.error("Error connecting to MongoDB:", err);
+    process.exit(1);
+  }
+  try {
+    const db = dbo.getDb();
+    subsCollection = await db.collection("subs");
+    logger.info("Successfully received collection");
+  } catch (err) {
+    logger.error("Error receiving collection", err);
+    process.exit(1);
+  }
 };
 
 const CronJob = require("cron").CronJob;
@@ -98,8 +104,7 @@ establishConnection();
 // eslint-disable-next-line
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  await attemptDB();
-  // console.log(subsCollection);
+  await getCollection();
   try {
     bot.sendMessage(msg.chat.id, "Please share your location", {
       reply_markup: {
@@ -122,43 +127,50 @@ bot.onText(/\/start/, async (msg) => {
   subscription.coordinates = userData.coordinates;
   subscription.userName = msg.from.username;
   subscription.userId = msg.from.id;
-  bot.sendMessage(chatId, "coordinates received", {
+  await bot.sendMessage(chatId, "Received Coordinates", {
     reply_markup: {
       remove_keyboard: true,
     },
   });
-  bot.sendMessage(
+  await bot.sendMessage(
     chatId,
-    "Please provide the time you want to schedule the task in the format 'hh:mm' using the 24-hour clock." +
+    "Please provide the time in UTC timezone that you want to schedule the task in the format 'hh:mm' using the 24-hour clock." +
       " For example, if you want to schedule the task for 3:30 PM, enter '15:30'.",
   );
 });
 
 let hour, minute;
-bot.on("message", (msg) => {
+bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const message = msg.text;
-  const timeRegex = /^\d{2}:\d{2}$/;
-
+  const timeRegex = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
   if (timeRegex.test(message)) {
     // Handle messages that match the time format
-    bot.sendMessage(chatId, "Thanks for sending the time!");
+    await bot.sendMessage(chatId, "Thanks for sending the time!");
     [hour, minute] = message.split(":");
   }
-  if (hour && minute) {
-    subscription.hour = hour;
-    subscription.minute = minute;
-    const cronFunction = (chatId) => {
-      onSendWeatherReport(msg, userData);
-    };
-    const job = new CronJob(
-      `${minute} ${hour} * * *`,
-      () => cronFunction(chatId),
-      null,
-      true,
-      TZ,
-    );
-    subsCollection.insertOne(subscription);
-    job.start();
+  try {
+    if (hour && minute) {
+      subscription.hour = hour;
+      subscription.minute = minute;
+      const cronFunction = (chatId) => {
+        onSendWeatherReport(msg, userData);
+      };
+      const job = new CronJob(
+        `${minute} ${hour} * * *`,
+        () => cronFunction(chatId),
+        null,
+        true,
+        TZ,
+      );
+      await subsCollection.insertOne(subscription);
+      await job.start();
+      bot.sendMessage(
+        chatId,
+        `You have subscribed on weather daily report at ${hour}:${minute}`,
+      );
+    }
+  } catch (err) {
+    logger.error(err);
   }
 });
