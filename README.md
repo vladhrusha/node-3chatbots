@@ -40,3 +40,7 @@ heroku config:set HEROKU_URL=$(heroku info -s | grep web_url | cut -d= -f2)
 
 npm install pino
 npm install -g pino-pretty
+
+npm install express
+npm instal cron
+npm install mongodb

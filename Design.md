@@ -18,7 +18,7 @@
 "node-telegram-bot-api": "^0.61.0"
 }
 
-![alt text](./sequenceDiagram.png)
+![alt text](./files/aboutMeBotSequenceDiagram.png)
 @startuml
 title Telegram Bot + Heroku Sequence Diagram
 
@@ -33,7 +33,7 @@ TelegramBotServer -> TelegramBotChannel: Response from Telegram server
 TelegramBotChannel -> User: response to "/command"
 @enduml
 
-![alt text](./holidayBot_sequenceDiagram.png)
+![alt text](./files/holidayBot_sequenceDiagram.png)
 
 @startuml
 title Telegram Bot + Heroku + HolidayAPI Sequence Diagram
@@ -51,7 +51,7 @@ TelegramBotServer -> TelegramBotChannel: Response from Telegram server
 TelegramBotChannel -> User: response to user message
 @enduml
 
-![alt text](./forecastBot_sequenceDiagram.png)
+![alt text](./files/forecastBot_sequenceDiagram.png)
 
 @startuml
 title Telegram Bot + Heroku + OpenWeatherAPI Sequence Diagram

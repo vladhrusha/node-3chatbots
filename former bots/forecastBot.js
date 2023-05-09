@@ -3,15 +3,15 @@ const TelegramBot = require("node-telegram-bot-api");
 let bot;
 const token = process.env.FORECASTBOT_TOKEN;
 const url = process.env.HEROKU_URL;
-const logger = require("./utils/logger");
+const logger = require("../utils/logger");
 const port = process.env.PORT || 8443;
 const options = {
   webHook: {
     port,
   },
 };
-const fetchForecast = require("./utils/fetchForecast");
-const composeForecast = require("./utils/composeForecast");
+const fetchForecast = require("../utils/fetchForecast");
+const composeForecast = require("../utils/composeForecast");
 
 const establishConnection = () => {
   try {

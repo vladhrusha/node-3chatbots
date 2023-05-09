@@ -3,10 +3,10 @@ const TelegramBot = require("node-telegram-bot-api");
 let bot;
 const token = process.env.HOLIDAYBOT_TOKEN;
 const url = process.env.HEROKU_URL;
-const logger = require("./utils/logger");
+const logger = require("../utils/logger");
 const { flag, name, code } = require("country-emoji");
 
-const fetchHolidays = require("./utils/fetchHolidays");
+const fetchHolidays = require("../utils/fetchHolidays");
 
 const countries = ["JP", "AL", "BE", "HR", "DK", "PE", "QA", "NO"];
 const countriesFlags = countries.map((country) => {
