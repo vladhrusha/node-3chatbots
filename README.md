@@ -4,43 +4,20 @@
 
 npm init -y
 
-npm install eslint --save-dev
-npm install --save-dev eslint-config-prettier@latest
-npm install --save-dev eslint-config-standard@latest
-npm install --save-dev eslint-plugin-import@latest
-npm install --save-dev eslint-plugin-n@latest
-npm install --save-dev eslint-plugin-prettier@latest
-npm install --save-dev eslint-plugin-promise@^6.1.1
+npm i
 
-npm install prettier --save-dev
-
-npm install husky --save-dev
-npx husky install
 npm pkg set scripts.prepare="husky install"
 npx husky add .husky/pre-commit "npm test"
 git add .husky/pre-commit
 
-npm install --save-dev lint-staged
-
-npm i node-telegram-bot-api
-
-npm install dotenv
-
 heroku login
-heroku git:remote -a about-me-bot12
+heroku git:remote -a herokuName
 git add .
 git push heroku dev
 
-buildbacks
-heroku/nodejs
-jontewks/puppeteer
+heroku buildpacks:
 
-heroku config:set TOKEN=
+- heroku/nodejs
+
+heroku config:set TOKEN={token}
 heroku config:set HEROKU_URL=$(heroku info -s | grep web_url | cut -d= -f2)
-
-npm install pino
-npm install -g pino-pretty
-
-npm install express
-npm instal cron
-npm install mongodb
