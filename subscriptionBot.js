@@ -13,7 +13,6 @@ const options = {
 };
 
 const onGetUserLocation = require("./utils/onGetUserLocation");
-const getCollection = require("./utils/getCollection");
 const addCronJob = require("./utils/addCronJob");
 
 let userData;
@@ -39,7 +38,6 @@ establishConnection();
 // eslint-disable-next-line
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  subsCollection = await getCollection();
   try {
     bot.sendMessage(msg.chat.id, "Please share your location", {
       reply_markup: {
@@ -83,6 +81,8 @@ bot.on("message", async (msg) => {
       [hour, minute] = message.split(":");
     }
     addCronJob(msg, bot, hour, minute, userData, subsCollection);
+    hour = undefined;
+    minute = undefined;
   } catch (err) {
     logger.error(err);
   }
