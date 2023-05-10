@@ -14,9 +14,10 @@ const options = {
 
 const onGetUserLocation = require("./utils/onGetUserLocation");
 const addCronJob = require("./utils/addCronJob");
+const addSubscription = require("./db/addSubscription");
+const collectSubscriptionsByUsername = require("./db/collectSubscriptionsByUsername");
 
 let userData;
-let subsCollection;
 
 const establishConnection = () => {
   try {
@@ -38,6 +39,7 @@ establishConnection();
 // eslint-disable-next-line
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
+  const subs = await collectSubscriptionsByUsername(msg.from.username);
   try {
     bot.sendMessage(msg.chat.id, "Please share your location", {
       reply_markup: {
@@ -57,6 +59,9 @@ bot.onText(/\/start/, async (msg) => {
   }
 
   userData = await onGetUserLocation(bot);
+  subs.forEach((sub) => {
+    addCronJob(msg, bot, sub.hour, sub.minute, userData);
+  });
   await bot.sendMessage(chatId, "Received Coordinates", {
     reply_markup: {
       remove_keyboard: true,
@@ -80,7 +85,8 @@ bot.on("message", async (msg) => {
       await bot.sendMessage(chatId, "Thanks for sending the time!");
       [hour, minute] = message.split(":");
     }
-    addCronJob(msg, bot, hour, minute, userData, subsCollection);
+    addCronJob(msg, bot, hour, minute, userData);
+    addSubscription(bot, msg, hour, minute, userData);
     hour = undefined;
     minute = undefined;
   } catch (err) {
