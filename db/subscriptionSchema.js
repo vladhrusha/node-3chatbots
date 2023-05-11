@@ -3,8 +3,12 @@ const mongoose = require("mongoose");
 const subscriptionSchema = new mongoose.Schema({
   userId: { type: Number, required: true },
   userName: { type: String, required: true },
-  hour: { type: Number, required: true },
-  minute: { type: Number, required: true },
+  times: [
+    {
+      hour: { type: Number, required: true },
+      minute: { type: Number, required: true },
+    },
+  ],
   coordinates: {
     lat: { type: Number },
     lon: { type: Number },

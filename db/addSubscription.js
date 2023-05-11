@@ -4,35 +4,33 @@ const mongose = require("./conn");
 // const logger = require("../utils/logger");
 
 const addSubscription = async (msg, hour, minute, userData) => {
-  let subscription;
-  if (hour !== undefined && minute !== undefined) {
-    subscription = new Subscription({
+  const existingSubscription = await Subscription.findOne({
+    userId: msg.from.id,
+    userName: msg.from.username,
+    chatId: msg.chat.id,
+  });
+
+  if (existingSubscription) {
+    const existingTime = existingSubscription.times.find(
+      (time) => time.hour === hour && time.minute === minute,
+    );
+    if (existingTime) {
+      throw new Error("subscription at this time already exists");
+    }
+    existingSubscription.times.push({ hour, minute });
+    await existingSubscription.save();
+  } else {
+    const newSubscription = new Subscription({
       userId: msg.from.id,
       userName: msg.from.username,
-      hour,
-      minute,
+      times: [{ hour, minute }],
       chatId: msg.chat.id,
+      coordinates: {
+        lat: userData.coordinates.lat,
+        lon: userData.coordinates.lon,
+      },
     });
-  }
-  if (subscription === undefined) {
-    return;
-  }
-  subscription.coordinates = {
-    lat: userData.coordinates.lat,
-    lon: userData.coordinates.lon,
-  };
-  if (Object.keys(subscription.toJSON()).length !== 0) {
-    const foundSubscription = await Subscription.findOne({
-      hour: subscription.hour,
-      minute: subscription.minute,
-      userName: subscription.userName,
-    });
-    if (foundSubscription) {
-      throw new Error("subscription at this time already exists");
-    } else {
-      await subscription.save();
-    }
-    Object.keys(subscription).forEach((key) => delete subscription[key]);
+    await newSubscription.save();
   }
 };
 

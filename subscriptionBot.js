@@ -14,15 +14,10 @@ const options = {
 
 const onGetUserLocation = require("./utils/onGetUserLocation");
 const addCronJob = require("./utils/addCronJob");
-const addSubscription = require("./db/addSubscription");
-const deleteSubscription = require("./db/deleteSubscription");
-
+const handleSubscriptionMessage = require("./utils/handleSubscriptionMessages");
 // const collectSubscriptionsByUsername = require("./db/collectSubscriptionsByUsername");
 const collectSubscriptions = require("./db/collectSubscriptions");
 const updateLocation = require("./db/updateLocation");
-
-const handleAddError = require("./utils/errors/handleAddError");
-const handleDeleteError = require("./utils/errors/handleDeleteError");
 
 const {
   requestLocation,
@@ -51,10 +46,18 @@ let subs;
 const start = async () => {
   establishConnection();
   subs = await collectSubscriptions();
-  subs.forEach((sub) => {
-    addCronJob(sub.chatId, bot, sub.hour, sub.minute, sub.coordinates);
-  });
-  // logger.info(subs);
+  if (subs.length === 1) {
+    const sub = subs[0];
+    sub.times.forEach((time) => {
+      addCronJob(sub.chatId, bot, time.hour, time.minute, sub.coordinates);
+    });
+  } else {
+    subs.forEach((sub) => {
+      sub.times.forEach((time) => {
+        addCronJob(sub.chatId, bot, time.hour, time.minute, sub.coordinates);
+      });
+    });
+  }
 };
 start();
 
@@ -93,14 +96,14 @@ bot.onText(/\/location/, async (msg) => {
     logger.error(err);
   }
 });
-let isSubscribing;
+const isSubscribingMap = new Map();
 
 // eslint-disable-next-line
 bot.onText(/\/sub/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    isSubscribing = true;
-    await requestTime(bot, chatId, isSubscribing);
+    isSubscribingMap.set(chatId, true);
+    await requestTime(bot, chatId, isSubscribingMap.get(chatId));
   } catch (err) {
     logger.error(err);
   }
@@ -111,8 +114,8 @@ const timeRegex = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 bot.onText(/\/unsub/, async (msg) => {
   const chatId = msg.chat.id;
   try {
-    isSubscribing = false;
-    await requestTime(bot, chatId, isSubscribing);
+    isSubscribingMap.set(chatId, false);
+    await requestTime(bot, chatId, isSubscribingMap.get(chatId));
   } catch (err) {
     logger.error(err);
   }
@@ -131,29 +134,13 @@ bot.onText(/\help/, async (msg) => {
 bot.onText(timeRegex, async (msg) => {
   const chatId = msg.chat.id;
   const [hour, minute] = msg.text.split(":");
-
-  if (isSubscribing === false) {
-    await bot.sendMessage(chatId, "Thanks for sending the unsub time!");
-    try {
-      await deleteSubscription(msg, hour, minute);
-      bot.sendMessage(
-        msg.chat.id,
-        `You have unsubscribed from weather daily report at ${hour}:${minute}`,
-      );
-    } catch (err) {
-      handleDeleteError(err, bot, chatId);
-    }
-  } else if (isSubscribing === true) {
-    await bot.sendMessage(chatId, "Thanks for sending the sub time!");
-    try {
-      await addCronJob(chatId, bot, hour, minute, userData.coordinates);
-      await addSubscription(msg, hour, minute, userData);
-      bot.sendMessage(
-        msg.chat.id,
-        `You have subscribed on weather daily report at ${hour}:${minute}`,
-      );
-    } catch (err) {
-      handleAddError(err, bot, chatId);
-    }
-  }
+  handleSubscriptionMessage(
+    isSubscribingMap,
+    chatId,
+    msg,
+    hour,
+    minute,
+    bot,
+    userData,
+  );
 });
