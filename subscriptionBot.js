@@ -21,6 +21,9 @@ const deleteSubscription = require("./db/deleteSubscription");
 const collectSubscriptions = require("./db/collectSubscriptions");
 const updateLocation = require("./db/updateLocation");
 
+const handleAddError = require("./utils/errors/handleAddError");
+const handleDeleteError = require("./utils/errors/handleDeleteError");
+
 const {
   requestLocation,
   respondLocation,
@@ -127,9 +130,10 @@ bot.onText(/\help/, async (msg) => {
 
 bot.onText(timeRegex, async (msg) => {
   const chatId = msg.chat.id;
+  const [hour, minute] = msg.text.split(":");
+
   if (isSubscribing === false) {
     await bot.sendMessage(chatId, "Thanks for sending the unsub time!");
-    const [hour, minute] = msg.text.split(":");
     try {
       await deleteSubscription(msg, hour, minute);
       bot.sendMessage(
@@ -137,13 +141,10 @@ bot.onText(timeRegex, async (msg) => {
         `You have unsubscribed from weather daily report at ${hour}:${minute}`,
       );
     } catch (err) {
-      if (err.message === "there is nothing to delete") {
-        await bot.sendMessage(chatId, "there is nothing to delete");
-      }
+      handleDeleteError(err, bot, chatId);
     }
   } else if (isSubscribing === true) {
     await bot.sendMessage(chatId, "Thanks for sending the sub time!");
-    const [hour, minute] = msg.text.split(":");
     try {
       await addCronJob(chatId, bot, hour, minute, userData.coordinates);
       await addSubscription(msg, hour, minute, userData);
@@ -152,22 +153,7 @@ bot.onText(timeRegex, async (msg) => {
         `You have subscribed on weather daily report at ${hour}:${minute}`,
       );
     } catch (err) {
-      if (err.message === "subscription at this time already exists") {
-        await bot.sendMessage(
-          chatId,
-          "You already have a subscription at this timeslot",
-        );
-      }
-
-      if (
-        err.message ===
-        "Cannot read properties of undefined (reading 'coordinates')"
-      ) {
-        await bot.sendMessage(
-          chatId,
-          "provide your geolocation using /location",
-        );
-      }
+      handleAddError(err, bot, chatId);
     }
   }
 });
