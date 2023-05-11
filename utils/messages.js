@@ -22,12 +22,22 @@ const respondLocation = async (bot, chatId) => {
   });
 };
 
-const requestTime = async (bot, chatId) => {
-  await bot.sendMessage(
-    chatId,
-    "Please provide the time in UTC timezone that you want to schedule the task in the format 'hh:mm' using the 24-hour clock." +
-      " For example, if you want to schedule the task for 3:30 PM, enter '15:30'.",
-  );
+const requestTime = async (bot, chatId, isSubscribing) => {
+  if (isSubscribing) {
+    await bot.sendMessage(
+      chatId,
+      "Please provide the time in UTC timezone that you want <b> to schedule the task </b> in the format 'hh:mm' using the 24-hour clock." +
+        " For example, if you want to schedule the task for 3:30 PM, enter '15:30'.",
+      { parse_mode: "HTML" },
+    );
+  } else if (!isSubscribing) {
+    await bot.sendMessage(
+      chatId,
+      "Please provide the time in UTC timezone that you want to <b> delete the existing subscription </b> in the format 'hh:mm' using the 24-hour clock." +
+        " For example, if you want to schedule the task for 3:30 PM, enter '15:30'.",
+      { parse_mode: "HTML" },
+    );
+  }
 };
 
 module.exports = {
