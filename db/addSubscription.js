@@ -11,6 +11,7 @@ const addSubscription = async (bot, msg, hour, minute, userData) => {
       userName: msg.from.username,
       hour,
       minute,
+      chatId: msg.chat.id,
     });
   }
   try {
@@ -24,10 +25,6 @@ const addSubscription = async (bot, msg, hour, minute, userData) => {
     if (Object.keys(subscription.toJSON()).length !== 0) {
       try {
         await subscription.save();
-        bot.sendMessage(
-          msg.chat.id,
-          `You have subscribed on weather daily report at ${subscription.hour}:${subscription.minute}`,
-        );
       } catch (err) {
         logger.error(err);
       }

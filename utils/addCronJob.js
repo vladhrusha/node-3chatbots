@@ -3,11 +3,12 @@ const CronJob = require("cron").CronJob;
 require("dotenv").config();
 const TZ = process.env.TZ;
 
-const addCronJob = async (msg, bot, hour, minute, userData) => {
+const addCronJob = async (chadId, bot, hour, minute, coordinates) => {
+  // console.log(coordinates);
   if (hour !== undefined && minute !== undefined) {
     const job = new CronJob(
       `${minute} ${hour} * * *`,
-      () => onSendWeatherReport(msg, userData, bot),
+      () => onSendWeatherReport(chadId, coordinates, bot),
       null,
       true,
       TZ,

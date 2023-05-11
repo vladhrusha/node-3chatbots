@@ -15,8 +15,13 @@ const options = {
 const onGetUserLocation = require("./utils/onGetUserLocation");
 const addCronJob = require("./utils/addCronJob");
 const addSubscription = require("./db/addSubscription");
-const collectSubscriptionsByUsername = require("./db/collectSubscriptionsByUsername");
-
+// const collectSubscriptionsByUsername = require("./db/collectSubscriptionsByUsername");
+const collectSubscriptions = require("./db/collectSubscriptions");
+const {
+  requestLocation,
+  respondLocation,
+  requestTime,
+} = require("./utils/messages");
 let userData;
 
 const establishConnection = () => {
@@ -35,43 +40,36 @@ const establishConnection = () => {
     process.exit(1);
   }
 };
-establishConnection();
+let subs;
+const start = async () => {
+  establishConnection();
+  subs = await collectSubscriptions();
+  subs.forEach((sub) => {
+    addCronJob(sub.chatId, bot, sub.hour, sub.minute, sub.coordinates);
+  });
+  // logger.info(subs);
+};
+start();
+
 // eslint-disable-next-line
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  const subs = await collectSubscriptionsByUsername(msg.from.username);
   try {
-    bot.sendMessage(msg.chat.id, "Please share your location", {
-      reply_markup: {
-        keyboard: [
-          [
-            {
-              text: "Share Location",
-              request_location: true,
-            },
-          ],
-        ],
-        one_time_keyboard: true,
-      },
-    });
+    await requestLocation(bot, chatId);
   } catch (err) {
     logger.error(err);
   }
-
   userData = await onGetUserLocation(bot);
-  subs.forEach((sub) => {
-    addCronJob(msg, bot, sub.hour, sub.minute, userData);
-  });
-  await bot.sendMessage(chatId, "Received Coordinates", {
-    reply_markup: {
-      remove_keyboard: true,
-    },
-  });
-  await bot.sendMessage(
-    chatId,
-    "Please provide the time in UTC timezone that you want to schedule the task in the format 'hh:mm' using the 24-hour clock." +
-      " For example, if you want to schedule the task for 3:30 PM, enter '15:30'.",
-  );
+  try {
+    await respondLocation(bot, chatId);
+  } catch (err) {
+    logger.error(err);
+  }
+  try {
+    await requestTime(bot, chatId);
+  } catch (err) {
+    logger.error(err);
+  }
 });
 
 let hour, minute;
@@ -84,11 +82,17 @@ bot.on("message", async (msg) => {
     if (timeRegex.test(message)) {
       await bot.sendMessage(chatId, "Thanks for sending the time!");
       [hour, minute] = message.split(":");
+      await addCronJob(chatId, bot, hour, minute, userData.coordinates);
+      await addSubscription(bot, msg, hour, minute, userData);
+      bot.sendMessage(
+        msg.chat.id,
+        `You have subscribed on weather daily report at ${hour}:${minute}`,
+      );
+      hour = undefined;
+      minute = undefined;
     }
-    addCronJob(msg, bot, hour, minute, userData);
-    addSubscription(bot, msg, hour, minute, userData);
-    hour = undefined;
-    minute = undefined;
+    // console.log("here");
+    // console.log(userData);
   } catch (err) {
     logger.error(err);
   }

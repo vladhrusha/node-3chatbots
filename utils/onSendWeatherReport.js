@@ -2,17 +2,14 @@ const logger = require("./logger");
 const fetchForecast = require("./fetchForecast");
 const composeForecast = require("./composeForecast");
 
-const onSendWeatherReport = async (msg, userData, bot) => {
+const onSendWeatherReport = async (chatId, coordinates, bot) => {
   let data;
-  let chatId;
   const numberOfDays = 1;
   try {
-    chatId = msg.chat.id;
-    const coordinates = {
-      lat: userData.coordinates.lat,
-      lon: userData.coordinates.lon,
-    };
+    // console.log(coordinates);
     data = await fetchForecast(coordinates, numberOfDays);
+    // console.log(data);
+
     if (data === undefined) {
       await bot.sendMessage(chatId, "Weather server request error", {
         parse_mode: "HTML",

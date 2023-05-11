@@ -9,6 +9,7 @@ const subscriptionSchema = new mongoose.Schema({
     lat: { type: Number },
     lon: { type: Number },
   },
+  chatId: { type: Number, required: true },
 });
 
 const Subscription = mongoose.model("Subscription", subscriptionSchema, "subs");
