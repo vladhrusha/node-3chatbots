@@ -7,7 +7,7 @@ const handleDeleteError = require("./errors/handleDeleteError");
 const addCronJob = require("./addCronJob");
 const logger = require("./logger");
 
-const handleSubscriptionMessage = async (
+const handleSubscriptionMessages = async ({
   isSubscribingMap,
   chatId,
   msg,
@@ -15,7 +15,7 @@ const handleSubscriptionMessage = async (
   minute,
   bot,
   userData,
-) => {
+}) => {
   if (isSubscribingMap.get(chatId) === false) {
     await bot.sendMessage(chatId, "Thanks for choosing the unsub time!");
     try {
@@ -43,4 +43,4 @@ const handleSubscriptionMessage = async (
   }
 };
 
-module.exports = handleSubscriptionMessage;
+module.exports = handleSubscriptionMessages;

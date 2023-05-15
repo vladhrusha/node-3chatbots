@@ -13,12 +13,15 @@ const options = {
 };
 
 const addCronJob = require("./utils/addCronJob");
-const handleSubscriptionMessage = require("./utils/handleSubscriptionMessages");
-const handleSetLocation = require("./utils/handleSetLocation");
-const handleStart = require("./utils/handleStart");
-const handleHelp = require("./utils/handleHelp");
-const handleSub = require("./utils/handleSub");
-const handleUnsub = require("./utils/handleUnsub");
+
+const {
+  handleHelp,
+  handleSetLocation,
+  handleStart,
+  handleSub,
+  handleUnsub,
+  handleSubscriptionMessages,
+} = require("./utils/handlers");
 
 const { getAllSubscriptions } = require("./services/subscription.service");
 
@@ -97,7 +100,7 @@ const timeRegex = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 bot.onText(timeRegex, async (msg) => {
   const chatId = msg.chat.id;
   const [hour, minute] = msg.text.split(":");
-  handleSubscriptionMessage(
+  handleSubscriptionMessages({
     isSubscribingMap,
     chatId,
     msg,
@@ -105,5 +108,5 @@ bot.onText(timeRegex, async (msg) => {
     minute,
     bot,
     userData,
-  );
+  });
 });
