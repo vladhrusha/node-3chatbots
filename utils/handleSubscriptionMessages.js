@@ -1,5 +1,7 @@
-const addSubscription = require("../db/addSubscription");
-const deleteSubscription = require("../db/deleteSubscription");
+const {
+  deleteSubscription,
+  addSubscription,
+} = require("../services/subscription.service");
 const handleAddError = require("./errors/handleAddError");
 const handleDeleteError = require("./errors/handleDeleteError");
 const addCronJob = require("./addCronJob");
@@ -15,7 +17,7 @@ const handleSubscriptionMessage = async (
   userData,
 ) => {
   if (isSubscribingMap.get(chatId) === false) {
-    await bot.sendMessage(chatId, "Thanks for sending the unsub time!");
+    await bot.sendMessage(chatId, "Thanks for choosing the unsub time!");
     try {
       await deleteSubscription(msg, hour, minute);
       bot.sendMessage(

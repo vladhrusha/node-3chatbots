@@ -21,8 +21,8 @@ const respondLocation = async (bot, chatId) => {
     },
   });
 };
-
-const requestTime = async (bot, chatId, isSubscribing) => {
+const { getByUsername } = require("../services/subscription.service");
+const requestTime = async (bot, chatId, isSubscribing, userName) => {
   if (isSubscribing) {
     await bot.sendMessage(
       chatId,
@@ -31,12 +31,18 @@ const requestTime = async (bot, chatId, isSubscribing) => {
       { parse_mode: "HTML" },
     );
   } else if (!isSubscribing) {
-    await bot.sendMessage(
-      chatId,
-      "Please provide the time in UTC timezone that you want to <b> delete the existing subscription </b> in the format 'hh:mm' using the 24-hour clock." +
-        " For example, if you want to schedule the task for 3:30 PM, enter '15:30'.",
-      { parse_mode: "HTML" },
-    );
+    await bot.sendMessage(chatId, "Select timeslot to unsubscribe", {
+      parse_mode: "HTML",
+    });
+    const entity = await getByUsername(userName);
+    const timeslots = entity.times.map((time) => {
+      return time.hour + ":" + time.minute;
+    });
+    await bot.sendMessage(chatId, "Welcome", {
+      reply_markup: {
+        keyboard: [timeslots],
+      },
+    });
   }
 };
 

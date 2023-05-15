@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const subscriptionSchema = new mongoose.Schema({
-  userId: { type: Number, required: true },
+  userId: { type: Number, required: true, unique: true },
   userName: { type: String, required: true },
   times: [
     {
@@ -13,7 +13,7 @@ const subscriptionSchema = new mongoose.Schema({
     lat: { type: Number },
     lon: { type: Number },
   },
-  chatId: { type: Number, required: true },
+  chatId: { type: Number, required: true, unique: true },
 });
 
 const Subscription = mongoose.model("Subscription", subscriptionSchema, "subs");

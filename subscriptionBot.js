@@ -12,18 +12,16 @@ const options = {
   },
 };
 
-const onGetUserLocation = require("./utils/onGetUserLocation");
 const addCronJob = require("./utils/addCronJob");
 const handleSubscriptionMessage = require("./utils/handleSubscriptionMessages");
-// const collectSubscriptionsByUsername = require("./db/collectSubscriptionsByUsername");
-const collectSubscriptions = require("./db/collectSubscriptions");
-const updateLocation = require("./db/updateLocation");
+const handleSetLocation = require("./utils/handleSetLocation");
+const handleStart = require("./utils/handleStart");
+const handleHelp = require("./utils/handleHelp");
+const handleSub = require("./utils/handleSub");
+const handleUnsub = require("./utils/handleUnsub");
 
-const {
-  requestLocation,
-  respondLocation,
-  requestTime,
-} = require("./utils/messages");
+const { getAllSubscriptions } = require("./services/subscription.service");
+
 let userData;
 
 const establishConnection = () => {
@@ -45,7 +43,7 @@ const establishConnection = () => {
 let subs;
 const start = async () => {
   establishConnection();
-  subs = await collectSubscriptions();
+  subs = await getAllSubscriptions();
   if (subs.length === 1) {
     const sub = subs[0];
     sub.times.forEach((time) => {
@@ -64,73 +62,38 @@ start();
 // eslint-disable-next-line
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
-    await requestLocation(bot, chatId);
-  } catch (err) {
-    logger.error(err);
-  }
-  userData = await onGetUserLocation(bot);
-  try {
-    await respondLocation(bot, chatId);
-  } catch (err) {
-    logger.error(err);
-  }
+  userData = await handleStart(chatId, bot, userData);
 });
 // eslint-disable-next-line
 bot.onText(/\/location/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
-    await requestLocation(bot, chatId);
-  } catch (err) {
-    logger.error(err);
-  }
-  userData = await onGetUserLocation(bot);
-  try {
-    await respondLocation(bot, chatId);
-    updateLocation(
-      msg.from.username,
-      userData.coordinates.lat,
-      userData.coordinates.lon,
-    );
-  } catch (err) {
-    logger.error(err);
-  }
+  userData = await handleSetLocation(msg, chatId, bot, userData);
 });
-const isSubscribingMap = new Map();
+let isSubscribingMap = new Map();
 
 // eslint-disable-next-line
 bot.onText(/\/sub/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
-    isSubscribingMap.set(chatId, true);
-    await requestTime(bot, chatId, isSubscribingMap.get(chatId));
-  } catch (err) {
-    logger.error(err);
-  }
+  isSubscribingMap = await handleSub(chatId, bot, isSubscribingMap);
 });
-const timeRegex = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 
 // eslint-disable-next-line
 bot.onText(/\/unsub/, async (msg) => {
   const chatId = msg.chat.id;
-  try {
-    isSubscribingMap.set(chatId, false);
-    await requestTime(bot, chatId, isSubscribingMap.get(chatId));
-  } catch (err) {
-    logger.error(err);
-  }
+  isSubscribingMap = await handleUnsub(
+    chatId,
+    bot,
+    isSubscribingMap,
+    msg.from.username,
+  );
 });
 
 // eslint-disable-next-line
 bot.onText(/\help/, async (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "Welcome", {
-    reply_markup: {
-      keyboard: [["/location", "/sub", "/unsub"]],
-    },
-  });
+  handleHelp(chatId, bot);
 });
-
+const timeRegex = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
 bot.onText(timeRegex, async (msg) => {
   const chatId = msg.chat.id;
   const [hour, minute] = msg.text.split(":");
