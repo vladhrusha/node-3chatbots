@@ -1,5 +1,5 @@
-const logger = require("./logger");
-const { requestTime } = require("./messages");
+const logger = require("../logger");
+const { requestTime } = require("../messages");
 
 const handleSub = async (chatId, bot, isSubscribingMap) => {
   try {

@@ -1,8 +1,8 @@
-const logger = require("./logger");
-const onGetUserLocation = require("./onGetUserLocation");
-const { requestLocation, respondLocation } = require("./messages");
+const logger = require("../logger");
+const onGetUserLocation = require("../onGetUserLocation");
+const { requestLocation, respondLocation } = require("../messages");
 
-const { updateLocation } = require("../services/subscription.service");
+const { updateLocation } = require("../../services/subscription.service");
 const handleSetLocation = async (msg, chatId, bot, userData) => {
   try {
     await requestLocation(bot, chatId);

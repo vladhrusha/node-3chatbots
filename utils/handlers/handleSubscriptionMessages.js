@@ -1,11 +1,11 @@
 const {
   deleteSubscription,
   addSubscription,
-} = require("../services/subscription.service");
-const handleAddError = require("./errors/handleAddError");
-const handleDeleteError = require("./errors/handleDeleteError");
-const addCronJob = require("./addCronJob");
-const logger = require("./logger");
+} = require("../../services/subscription.service");
+const handleAddError = require("../errors/handleAddError");
+const handleDeleteError = require("../errors/handleDeleteError");
+const addCronJob = require("../addCronJob");
+const logger = require("../logger");
 
 const handleSubscriptionMessages = async ({
   isSubscribingMap,
