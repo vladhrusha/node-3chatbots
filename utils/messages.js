@@ -31,14 +31,11 @@ const requestTime = async (bot, chatId, isSubscribing, userName) => {
       { parse_mode: "HTML" },
     );
   } else if (!isSubscribing) {
-    await bot.sendMessage(chatId, "Select timeslot to unsubscribe", {
-      parse_mode: "HTML",
-    });
     const entity = await getByUsername(userName);
     const timeslots = entity.times.map((time) => {
       return time.hour + ":" + time.minute;
     });
-    await bot.sendMessage(chatId, "Welcome", {
+    await bot.sendMessage(chatId, "Select timeslot to unsubscribe", {
       reply_markup: {
         keyboard: [timeslots],
       },
