@@ -1,1 +1,1 @@
-web: node forecastBot.js
+web: node subscriptionBot.js

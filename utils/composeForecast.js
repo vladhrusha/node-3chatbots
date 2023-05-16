@@ -14,7 +14,7 @@ const composeForecast = async (data) => {
       String(dateTimeMilliseconds.getHours()).padStart(2, "0") + ":00";
     return {
       city: data.city.name + ", " + data.city.country,
-      time: date + ", " + time,
+      time: date + ", " + time + " UTC",
       weather: forecastStamp.weather[0].main,
       description: forecastStamp.weather[0].description,
       temp: forecastStamp.main.temp + "°C",
